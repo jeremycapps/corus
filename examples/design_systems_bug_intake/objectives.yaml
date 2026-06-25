@@ -1,0 +1,10 @@
+objectives:
+  - id: objective.validated_fix
+    workstream: design_systems_bug_intake
+
+    requires:
+      - requirement.request_reported
+      - requirement.task_done
+      - requirement.review_completed
+
+    completion: requirement.validation_present
