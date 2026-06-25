@@ -1,0 +1,22 @@
+requirements:
+  # path format follows Libera path syntax, commonly {type}/{id}
+
+  # boundary = work enters or exits
+  - id: requirement.request_reported
+    path: boundary/request
+    value: reported
+
+  # movement = work advances or changes
+  - id: requirement.task_done
+    path: movement/task
+    value: done
+
+  # governance = work is reviewed, approved, or accepted
+  - id: requirement.review_completed
+    path: governance/review
+    value: completed
+
+  # exception = work deviates from expected state
+  - id: requirement.validation_present
+    path: exception/validation
+    value: validated
