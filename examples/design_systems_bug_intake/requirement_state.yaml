@@ -1,0 +1,32 @@
+requirement_states:
+  - requirement: requirement.request_reported
+    status: satisfied
+    expected:
+      path: boundary/request
+      value: reported
+    current:
+      value: reported
+
+  - requirement: requirement.task_done
+    status: waiting
+    expected:
+      path: movement/task
+      value: done
+    current:
+      value: in_progress
+
+  - requirement: requirement.review_completed
+    status: waiting
+    expected:
+      path: governance/review
+      value: completed
+    current:
+      value: scheduled
+
+  - requirement: requirement.validation_present
+    status: waiting
+    expected:
+      path: exception/validation
+      value: validated
+    current:
+      value: missing
