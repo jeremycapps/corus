@@ -1,0 +1,8 @@
+current_state:
+  workstream: design_systems_bug_intake
+
+  values:
+    boundary/request: reported
+    movement/task: in_progress
+    governance/review: scheduled
+    exception/validation: missing
