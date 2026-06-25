@@ -1,6 +1,6 @@
 # Architecture
 
-Corus evaluates coordination state from expected path-states.
+Corus coordinates objective state from expected path-states.
 
 ## Boundary
 
@@ -10,13 +10,15 @@ Workstream paths are defined outside Corus, commonly by Libera. Corus references
 
 Corus does not record moments.
 
-Observed state changes are recorded outside Corus, commonly by Timpos. Corus consumes the current replayed state of a workstream.
+Observed state changes are recorded outside Corus, commonly by Timpos. Corus may consume the current replayed state of a workstream, but replay input is not a top-level Corus protocol object in v1.
 
 Corus does not render role-specific meaning.
 
 Role-specific meaning and surfaces belong above Corus.
 
 ## Authored objects
+
+Corus v1 has two authored objects.
 
 ### Requirement
 
@@ -49,15 +51,13 @@ objective:
 
 If `completion` is omitted, all required requirements prove closure.
 
-## Derived objects
+## Derived behavior
 
-### Requirement State
+Requirement state and objective state are derived behavior, not authored protocol objects.
 
 A requirement state is derived by comparing a requirement's expected path-state to the current replayed value at that path.
 
-### Objective State
-
-An objective state is derived by reducing requirement states.
+An objective state is derived by reducing requirement satisfaction across an objective's `requires` and optional `completion` relation.
 
 ```text
 waiting
@@ -66,3 +66,16 @@ complete
 ```
 
 Corus v1 does not model `blocked`.
+
+## Relation model
+
+```text
+Libera:
+  Workstream relates paths.
+
+Timpos:
+  Moment references timpo.
+
+Corus:
+  Objective relates requirements.
+```
