@@ -2,9 +2,9 @@
 
 A small protocol for coordinating objective state from expected path-states.
 
-Corus evaluates whether objective requirements are satisfied by the current replayed state of a workstream.
+Corus defines authored coordination objects. It does not store replay input or derived state as top-level protocol objects.
 
-Libera defines valid workstream paths. Timpos records observed path changes. Corus evaluates expected path-states.
+Libera defines valid workstream paths. Timpos records observed path changes. Corus defines the expected path-states an objective cares about.
 
 ## Path-state format
 
@@ -29,13 +29,6 @@ Corus v1 has two authored objects:
 ```text
 Requirement = expected path-state
 Objective   = relation over requirements
-```
-
-Corus v1 derives:
-
-```text
-Requirement State = whether a requirement is satisfied
-Objective State   = waiting, ready_for_completion, or complete
 ```
 
 ## Requirement
@@ -72,23 +65,21 @@ objective:
 
 If `completion` is omitted, all required requirements prove closure.
 
-## Status
+## Derived state
 
-Corus v1 does not model `blocked`.
+Corus can derive requirement state and objective state by comparing requirements against current replayed workstream state.
+
+Those derived states are documented as behavior, not modeled as top-level authored protocol objects.
 
 ```text
-waiting:
-  one or more required requirements are unsatisfied
+requirement_state:
+  satisfied | waiting
 
-ready_for_completion:
-  all required requirements are satisfied
-  completion is defined
-  completion is unsatisfied
-
-complete:
-  completion is defined and satisfied
-  OR completion is not defined and all required requirements are satisfied
+objective_state:
+  waiting | ready_for_completion | complete
 ```
+
+Corus v1 does not model `blocked`. Use `waiting_on` in derived output language to describe unsatisfied requirements without implying failure or negative conditions.
 
 ## Relation model
 
@@ -110,17 +101,11 @@ protocol/
   README.md
   objective.schema.yaml
   requirement.schema.yaml
-  current_state.schema.yaml
-  requirement_state.schema.yaml
-  objective_state.schema.yaml
 
 examples/
   design_systems_bug_intake/
     objectives.yaml
     requirements.yaml
-    current_state.yaml
-    requirement_state.yaml
-    objective_state.yaml
 
 docs/
   architecture.md
@@ -135,6 +120,8 @@ Corus does not define workstream paths.
 
 Corus does not record moments.
 
+Corus does not store replay inputs as protocol fixtures.
+
 Corus does not render role-specific meaning.
 
 ## Keeper
@@ -143,5 +130,5 @@ Corus does not render role-specific meaning.
 Requirement = expected path-state.
 Objective = relation over requirements.
 Completion = optional singular requirement.
-Objective State = derived coordination status.
+Derived state is behavior, not a top-level authored object.
 ```
