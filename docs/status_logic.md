@@ -2,7 +2,9 @@
 
 Corus v1 derives objective state from requirement satisfaction.
 
-## Requirement state
+Status logic is behavior documentation. Requirement state and objective state are not top-level authored protocol objects in v1.
+
+## Requirement satisfaction
 
 A requirement is satisfied when the current replayed value at its path equals its expected value.
 
@@ -52,14 +54,11 @@ completion is not defined and all requirements listed in `requires` are satisfie
 
 Corus v1 does not model `blocked`.
 
-Use `waiting_on` to represent sequence without implying failure, contradiction, or negative conditions.
+Use `waiting_on` in derived output language to represent sequence without implying failure, contradiction, or negative conditions.
 
-```yaml
-objective_state:
-  status: waiting
-  requires:
-    waiting_on:
-      - requirement.task_done
+```text
+waiting_on:
+  unsatisfied requirements that must become satisfied before progress or completion
 ```
 
 ## Completion
