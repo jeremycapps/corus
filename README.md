@@ -1,10 +1,10 @@
 # Corus
 
-A small protocol for coordinating objective state from expected path-states.
+A small protocol for coordinating objective state from expected domain-bound path-states.
 
 Corus defines authored coordination objects. It does not store replay input or derived state as top-level protocol objects.
 
-Libera defines valid workstream paths. Timpos records observed path changes. Corus defines the expected path-states an objective cares about.
+Libera defines valid address grammar. Domain binds those addresses to meaning. Timpos records observed path changes. Corus defines the expected path-states an objective cares about.
 
 ## Path-state format
 
@@ -17,46 +17,47 @@ A Corus requirement has the form:
 Example:
 
 ```text
-movement/task = done
+movement/change/facia_surface_model.status = updated
 ```
 
-The path uses Libera path syntax. Corus references paths but does not define them.
+The path uses Libera path syntax. The meaning of the path comes from a Domain binding. Corus references paths and bindings but does not define either.
 
 ## Core model
 
 Corus v1 has two authored objects:
 
 ```text
-Requirement = expected path-state
+Requirement = expected domain-bound path-state
 Objective   = relation over requirements
 ```
 
 ## Requirement
 
-A Requirement defines one expected value at one Libera path.
+A Requirement defines one expected value at one Libera path, optionally through a Domain binding.
 
 ```yaml
 requirement:
-  id: requirement.task_done
-  path: movement/task
-  value: done
+  id: requirement.surface_model_updated
+  binding: binding.facia_surface_model_change
+  path: movement/change/facia_surface_model.status
+  value: updated
 ```
 
 ## Objective
 
-An Objective relates requirements inside a workstream.
+An Objective relates requirements inside a program.
 
 ```yaml
 objective:
-  id: objective.validated_fix
-  workstream: design_systems_bug_intake
+  id: objective.facia_v2
+  program: protocol_design
+  domain: domain.protocol_design
 
   requires:
-    - requirement.request_reported
-    - requirement.task_done
-    - requirement.review_completed
+    - requirement.surface_model_updated
+    - requirement.routes_updated
 
-  completion: requirement.validation_present
+  completion: requirement.examples_updated
 ```
 
 `requires` is all-of.
@@ -67,7 +68,7 @@ If `completion` is omitted, all required requirements prove closure.
 
 ## Derived state
 
-Corus can derive requirement state and objective state by comparing requirements against current replayed workstream state.
+Corus can derive requirement state and objective state by comparing requirements against current replayed program state.
 
 Those derived states are documented as behavior, not modeled as top-level authored protocol objects.
 
@@ -81,17 +82,25 @@ objective_state:
 
 Corus v1 does not model `blocked`. Use `waiting_on` in derived output language to describe unsatisfied requirements without implying failure or negative conditions.
 
+Complete state belongs to Corus. Facia only surfaces active state when coordination, implementation, or verification is still needed.
+
 ## Relation model
 
 ```text
 Libera:
-  Workstream relates paths.
+  Defines filesystem motion.
+
+Domain:
+  Binds Libera motion to domain meaning.
 
 Timpos:
-  Moment references timpo.
+  Moment records observed state at an address.
 
 Corus:
-  Objective relates requirements.
+  Objective evaluates requirements into satisfied or unsatisfied state.
+
+Facia:
+  Routes active evaluated state into use.
 ```
 
 ## Repository layout
@@ -116,18 +125,20 @@ docs/
 
 ## Boundaries
 
-Corus does not define workstream paths.
+Corus does not define Libera paths.
+
+Corus does not define Domain meaning.
 
 Corus does not record moments.
 
 Corus does not store replay inputs as protocol fixtures.
 
-Corus does not render role-specific meaning.
+Corus does not render role-specific meaning or active-use surfaces.
 
 ## Keeper
 
 ```text
-Requirement = expected path-state.
+Requirement = expected domain-bound path-state.
 Objective = relation over requirements.
 Completion = optional singular requirement.
 Derived state is behavior, not a top-level authored object.
